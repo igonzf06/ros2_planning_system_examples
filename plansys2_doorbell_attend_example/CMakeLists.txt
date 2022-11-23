@@ -9,6 +9,7 @@ find_package(plansys2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(plansys2_executor REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(text_to_speech_interfaces REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_planner REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
@@ -21,6 +22,7 @@ set(dependencies
     rclcpp_action
     plansys2_msgs
     nav2_msgs
+    text_to_speech_interfaces
     plansys2_domain_expert
     plansys2_executor
     plansys2_planner

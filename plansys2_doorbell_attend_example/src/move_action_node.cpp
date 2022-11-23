@@ -40,38 +40,33 @@ public:
     geometry_msgs::msg::PoseStamped wp;
     wp.header.frame_id = "map";
     wp.header.stamp = now();
-    wp.pose.position.x = 3.79;
-    wp.pose.position.y = 6.77;
+    wp.pose.position.x = 0.23;
+    wp.pose.position.y = 0.0;
     wp.pose.position.z = 0.0;
     wp.pose.orientation.x = 0.0;
     wp.pose.orientation.y = 0.0;
-    wp.pose.orientation.z = 0.99;
-    wp.pose.orientation.w = 0.12;
+    wp.pose.orientation.z = 1.0;
+    wp.pose.orientation.w = 0.0;
     waypoints_["kitchen"] = wp;
 
-    wp.pose.position.x = 7.50;
-    wp.pose.position.y = 4.89;
-    wp.pose.orientation.z = 0.76;
-    wp.pose.orientation.w = 0.65;
+    wp.pose.position.x = 1.14;
+    wp.pose.position.y = 2.32;
+    wp.pose.orientation.z = 1.0;
+    wp.pose.orientation.w = 0.0;
     waypoints_["bedroom"] = wp;
 
-    wp.pose.position.x = 1.55;
-    wp.pose.position.y = 4.03;
-    wp.pose.orientation.z = -0.69;
-    wp.pose.orientation.w = 0.72;
+    wp.pose.position.x = 0.55;
+    wp.pose.position.y = 5.61;
+    wp.pose.orientation.z = 0.35;
+    wp.pose.orientation.w = 1.0;
     waypoints_["livingroom"] = wp;
 
-    wp.pose.position.x = 1.15;
-    wp.pose.position.y = 7.0;
-    wp.pose.orientation.z = 0.78;
-    wp.pose.orientation.w = 0.67;
+    wp.pose.position.x = 6.39;
+    wp.pose.position.y = 3.26;
+    wp.pose.orientation.z = 0.43;
+    wp.pose.orientation.w = 0.9;
     waypoints_["entrance"] = wp;
 
-    wp.pose.position.x = 5.0;
-    wp.pose.position.y = 3.68;
-    wp.pose.orientation.z = 0.81;
-    wp.pose.orientation.w = 0.59;
-    waypoints_["bathroom"] = wp;
 
     using namespace std::placeholders;
     pos_sub_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(

@@ -16,6 +16,7 @@
 #include <algorithm>
 
 #include "plansys2_executor/ActionExecutorClient.hpp"
+#include "text_to_speech_interfaces/action/tts.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -31,10 +32,45 @@ public:
     progress_ = 0.0;
   }
 
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_activate(const rclcpp_lifecycle::State & previous_state)
+  {
+    send_feedback(0.0, "Check starting");
+
+    tts_action_client_ =
+      rclcpp_action::create_client<text_to_speech_interfaces::action::TTS>(
+      shared_from_this(),
+      "text_to_speech/tts");
+
+    bool is_action_server_ready = false;
+    do {
+      RCLCPP_INFO(get_logger(), "Waiting for text_to_speech action server...");
+
+      is_action_server_ready =
+        tts_action_client_->wait_for_action_server(std::chrono::seconds(5));
+    } while (!is_action_server_ready);
+
+    RCLCPP_INFO(get_logger(), "text_to_speech action server ready");
+
+    tts_goal_.text = "You can come in";
+
+    auto send_goal_options =
+      rclcpp_action::Client<text_to_speech_interfaces::action::TTS>::SendGoalOptions();
+
+    send_goal_options.result_callback = [this](auto) {
+        finish(true, 1.0, "Door attended");
+      };
+
+    future_tts_goal_handle_ =
+      tts_action_client_->async_send_goal(tts_goal_, send_goal_options);
+
+    return ActionExecutorClient::on_activate(previous_state);
+  }
+
 private:
   void do_work()
   {
-    if (progress_ < 1.0) {
+/*     if (progress_ < 1.0) {
       progress_ += 0.02;
       send_feedback(progress_, "Checking the door");
     } else {
@@ -46,8 +82,15 @@ private:
 
     std::cout << "\r\e[K" << std::flush;
     std::cout << "Checking ... [" << std::min(100.0, progress_ * 100.0) << "%]  " <<
-      std::flush;
+      std::flush; */
   }
+  using TTSGoalHandle =
+    rclcpp_action::ClientGoalHandle<text_to_speech_interfaces::action::TTS>;
+  using TTSFeedback =
+    const std::shared_ptr<const text_to_speech_interfaces::action::TTS::Feedback>;
+  rclcpp_action::Client<text_to_speech_interfaces::action::TTS>::SharedPtr tts_action_client_;
+  std::shared_future<TTSGoalHandle::SharedPtr> future_tts_goal_handle_;
+  text_to_speech_interfaces::action::TTS::Goal tts_goal_;
 
   float progress_;
 };
