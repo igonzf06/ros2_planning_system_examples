@@ -34,16 +34,18 @@ add_executable(move_action_node src/move_action_node.cpp)
 ament_target_dependencies(move_action_node ${dependencies})
 add_executable(checkdoor_action_node src/checkdoor_action_node.cpp)
 ament_target_dependencies(checkdoor_action_node ${dependencies})
-
-#add_executable(charge_action_node src/charge_action_node.cpp)
-#ament_target_dependencies(charge_action_node ${dependencies})
+add_executable(doorcheck_controller_node src/doorcheck_controller_node.cpp)
+ament_target_dependencies(doorcheck_controller_node ${dependencies})
+add_executable(listen_action_node src/listen_action_node.cpp)
+ament_target_dependencies(listen_action_node ${dependencies})
 
 install(DIRECTORY launch pddl DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
   move_action_node
   checkdoor_action_node
-  #charge_action_node
+  doorcheck_controller_node
+  listen_action_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

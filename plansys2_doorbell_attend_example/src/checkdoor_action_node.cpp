@@ -23,10 +23,10 @@
 
 using namespace std::chrono_literals;
 
-class MoveAction : public plansys2::ActionExecutorClient
+class CheckDoorAction : public plansys2::ActionExecutorClient
 {
 public:
-  MoveAction()
+  CheckDoorAction()
   : plansys2::ActionExecutorClient("checkdoor", 250ms)
   {
     progress_ = 0.0;
@@ -54,6 +54,8 @@ public:
 
     tts_goal_.text = "You can come in";
 
+    RCLCPP_INFO(get_logger(), "Checking the door");
+
     auto send_goal_options =
       rclcpp_action::Client<text_to_speech_interfaces::action::TTS>::SendGoalOptions();
 
@@ -68,22 +70,7 @@ public:
   }
 
 private:
-  void do_work()
-  {
-/*     if (progress_ < 1.0) {
-      progress_ += 0.02;
-      send_feedback(progress_, "Checking the door");
-    } else {
-      finish(true, 1.0, "Check completed");
 
-      progress_ = 0.0;
-      std::cout << std::endl;
-    }
-
-    std::cout << "\r\e[K" << std::flush;
-    std::cout << "Checking ... [" << std::min(100.0, progress_ * 100.0) << "%]  " <<
-      std::flush; */
-  }
   using TTSGoalHandle =
     rclcpp_action::ClientGoalHandle<text_to_speech_interfaces::action::TTS>;
   using TTSFeedback =
@@ -98,7 +85,7 @@ private:
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<MoveAction>();
+  auto node = std::make_shared<CheckDoorAction>();
 
   node->set_parameter(rclcpp::Parameter("action_name", "checkdoor"));
   node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);

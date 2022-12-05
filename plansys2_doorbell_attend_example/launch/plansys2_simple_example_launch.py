@@ -44,6 +44,12 @@ def generate_launch_description():
             'namespace': namespace
         }.items())
 
+    tts_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(
+            get_package_share_directory('text_to_speech'),
+            'text_to_speech.launch.py')),
+        )
+
     # Specify the actions
     move_cmd = Node(
         package='plansys2_doorbell_attend_example',
@@ -61,14 +67,33 @@ def generate_launch_description():
         output='screen',
         parameters=[])
 
+    listen_cmd = Node(
+        package='plansys2_doorbell_attend_example',
+        executable='listen_action_node',
+        name='listen_action_node',
+        namespace=namespace,
+        output='screen',
+        parameters=[])
+
+    """     controller_cmd = Node(
+        package='plansys2_doorbell_attend_example',
+        executable='doorcheck_controller_node',
+        name='doorcheck_controller_node',
+        namespace=namespace,
+        output='screen',
+        parameters=[]) """
+
     ld = LaunchDescription()
 
     ld.add_action(declare_namespace_cmd)
 
     # Declare the launch options
     ld.add_action(plansys2_cmd)
+    ld.add_action(tts_cmd)
 
     ld.add_action(move_cmd)
     ld.add_action(checkdoor_cmd)
+    ld.add_action(listen_cmd)
+    #ld.add_action(controller_cmd)
 
     return ld

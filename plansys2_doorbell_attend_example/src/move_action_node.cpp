@@ -40,31 +40,31 @@ public:
     geometry_msgs::msg::PoseStamped wp;
     wp.header.frame_id = "map";
     wp.header.stamp = now();
-    wp.pose.position.x = 0.23;
-    wp.pose.position.y = 0.0;
+    wp.pose.position.x = 6.58; //0.23
+    wp.pose.position.y = -1.44; //0.0
     wp.pose.position.z = 0.0;
     wp.pose.orientation.x = 0.0;
     wp.pose.orientation.y = 0.0;
-    wp.pose.orientation.z = 1.0;
-    wp.pose.orientation.w = 0.0;
+    wp.pose.orientation.z = 1.0; //1.0
+    wp.pose.orientation.w = 0.0; //0.0
     waypoints_["kitchen"] = wp;
 
-    wp.pose.position.x = 1.14;
-    wp.pose.position.y = 2.32;
-    wp.pose.orientation.z = 1.0;
-    wp.pose.orientation.w = 0.0;
+    wp.pose.position.x = -6.43; //1.14
+    wp.pose.position.y = -0.06; //2.32
+    wp.pose.orientation.z = 1.0; //1.0
+    wp.pose.orientation.w = 0.0; //0.0
     waypoints_["bedroom"] = wp;
 
-    wp.pose.position.x = 0.55;
-    wp.pose.position.y = 5.61;
-    wp.pose.orientation.z = 0.35;
-    wp.pose.orientation.w = 1.0;
+    wp.pose.position.x = -0.02; //0.55
+    wp.pose.position.y = 0.01; //5.61
+    wp.pose.orientation.z = 0.35; //0.35
+    wp.pose.orientation.w = 1.0; //1.0
     waypoints_["livingroom"] = wp;
 
-    wp.pose.position.x = 6.39;
-    wp.pose.position.y = 3.26;
-    wp.pose.orientation.z = 0.43;
-    wp.pose.orientation.w = 0.9;
+    wp.pose.position.x = 5.80; //6.39
+    wp.pose.position.y = -4.63; //3.26
+    wp.pose.orientation.z =-0.77; //0.43
+    wp.pose.orientation.w = 0.63; //0.9
     waypoints_["entrance"] = wp;
 
 
