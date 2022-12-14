@@ -34,7 +34,6 @@ class DoorCheckController : public rclcpp::Node
 public:
   std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
   std::shared_ptr<plansys2::DomainExpertClient> domain_expert_;
-  std::list<std::string> doorbell_sounds = {"doorbell", "bell", "ding-dong", "tubular_bells", "reversing_beeps", "beepbleep", "chime"};
 
   DoorCheckController()
   : rclcpp::Node("doorcheck_controller"), state_(STARTING)
@@ -96,10 +95,7 @@ public:
 private:
   typedef enum {STARTING, DOORBELL_LISTENED} StateType;
   StateType state_;
-
-  //std::shared_ptr<plansys2::DomainExpertClient> domain_expert_;
   std::shared_ptr<plansys2::PlannerClient> planner_client_;
-  //std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
   std::shared_ptr<plansys2::ExecutorClient> executor_client_;
 };
 
@@ -107,26 +103,27 @@ int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<DoorCheckController>();
+  std::list<std::string> doorbell_sounds = {"doorbell", "bell", "ding-dong", "tubular_bells", "reversing_beeps", "beepbleep", "chime"};
 
   node->init();
 
+  bool sound_listened = false;
   rclcpp::Rate rate(5);
-  while (rclcpp::ok()) {
+  while (!sound_listened) {
     auto predicates = node->problem_expert_->getPredicates();
-    //auto pred = node->domain_expert_->getPredicate("sound_listened");
-    //RCLCPP_INFO(node->get_logger(), pred.value().parameters[0].name.c_str());
+    
+    auto it = std::find_if(predicates.begin(), predicates.end(), [&doorbell_sounds](const plansys2::Predicate& pred) {
+      return (std::find(doorbell_sounds.begin(), doorbell_sounds.end(), pred.parameters[0].name) != doorbell_sounds.end());
+    });
 
-    for (auto const &i: predicates){
-      if(std::find(node->doorbell_sounds.begin(), node->doorbell_sounds.end(), i.value().parameters[0].name)){
-        RCLCPP_INFO(node->get_logger(), "timbre");
-      }
-        //std::cout << parser::pddl::toString(i) << std::endl;
-        //std::string predicate = parser::pddl::toString(i);
-        //RCLCPP_INFO(node->get_logger(), parser::pddl::toString(i).c_str());
+    if(it != predicates.end()){
+      RCLCPP_INFO(node->get_logger(), "doorbell sound listened.");
+      sound_listened = true;
+      node->step();
     }
-    //node->step();
+    
 
-    //rate.sleep();
+    rate.sleep();
     rclcpp::spin_some(node->get_node_base_interface());
   }
 
